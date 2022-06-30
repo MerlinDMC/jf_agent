@@ -123,6 +123,9 @@ class GitLabClient:
             log_and_print_request_error(e, f'error fetching data for group {group_id}')
             return None
 
+    def list_active_projects(self):
+        return self.client.projects.list(all=True, archived=False)
+
     def get_project(self, project_id):
         return self.client.projects.get(project_id)
 

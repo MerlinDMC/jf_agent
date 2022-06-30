@@ -53,8 +53,15 @@ class GitLabAdapter(GitAdapter):
     def get_projects(self) -> List[NormalizedProject]:
         print('downloading gitlab projects... ', end='', flush=True)
         projects = []
+        project_ids = self.config.git_include_projects
 
-        for project_id in self.config.git_include_projects:
+        if not project_ids:
+            project_ids = [
+                project.id for project in self.client.list_active_projects()
+                if project.id not in self.config.git_exclude_projects
+            ]
+
+        for project_id in project_ids:
             group = self.client.get_group(project_id)
 
             if group is None:  # skip groups that errored out when fetching data

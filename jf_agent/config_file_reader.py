@@ -324,13 +324,13 @@ def _get_git_config(git_config, git_provider_override=None, multiple=False) -> G
         print(f'ERROR: Github enterprise URL appears malformed.  Did you mean "{git_url}/api/v3"?')
         raise BadConfigException()
 
-    # gitlab must be in whitelist mode
-    if git_provider == 'gitlab' and (git_exclude_projects or not git_include_projects):
+    # gitlab should be in whitelist mode or should exclude projects
+    if git_provider == 'gitlab' and not git_include_projects and not git_exclude_projects:
         print(
-            'ERROR: GitLab requires a list of projects (i.e., GitLab top-level groups) '
-            'to pull from. Make sure you set `include_projects` and not `exclude_projects`, and try again.'
+            'WARNING: GitLab requires a list of projects (i.e., GitLab top-level groups) '
+            'to pull from. Make sure you set `include_projects` or `exclude_projects`. '
+            'Will continue with ALL active projects.'
         )
-        raise BadConfigException()
 
     # BBCloud must be in whitelist mode
     if git_provider == 'bitbucket_cloud' and (git_exclude_projects or not git_include_projects):
