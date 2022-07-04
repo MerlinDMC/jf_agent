@@ -20,6 +20,8 @@ RUN apt-get update && apt-get -y upgrade && rm -rf /var/lib/apt/lists/* && \
     useradd --home-dir /home/jf_agent --shell /bin/bash --user-group jf_agent && \
     chown -R jf_agent:jf_agent /home/jf_agent
 
+RUN apt-get update && apt-get -y install wget curl && rm -rf /var/lib/apt/lists/*
+
 COPY --chown=jf_agent:jf_agent . /home/jf_agent
 RUN rm /home/jf_agent/Pipfile /home/jf_agent/Pipfile.lock
 WORKDIR /home/jf_agent
